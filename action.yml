@@ -1,5 +1,5 @@
-name: 'Metis Test Suite'
-description: 'Create metis test session'
+name: 'Metis Analysis'
+description: 'Analysis database infrastructure'
 inputs:
   metis_api_key:
     description: metis api key project identifier
@@ -17,9 +17,6 @@ inputs:
     description: database connection string 
     required: true
     default: ''
-outputs:
-  pr_tag: # id of output
-    description: 'the tag pr value'
 runs:
   using: 'node16'
   main: 'dist/index.js'
