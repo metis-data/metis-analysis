@@ -16438,6 +16438,7 @@ const fast_memoize_decorator_1 = __nccwpck_require__(5764);
 const fs_1 = __nccwpck_require__(7147);
 const path_1 = __nccwpck_require__(1017);
 const helper_1 = __nccwpck_require__(9958);
+console.log(__dirname);
 const packageJson = JSON.parse((0, fs_1.readFileSync)((0, path_1.join)(__dirname, "../../package.json"), { encoding: "utf8" }));
 /**
  * Function to get duplicate relation names from given relations.
