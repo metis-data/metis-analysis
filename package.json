@@ -1,12 +1,12 @@
 {
-  "name": "metis-analysis", 
+  "name": "metis-analysis",
   "version": "1.0.0",
   "description": "lets see",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ncc build index.js --license licenses.txt",
-    "build-post": "ncc build post.js --out dist/post --license licenses.txt"
+    "build": "ncc build index.js --out dist/v1 --license licenses.txt",
+    "build-post": "ncc build post.js --out dist/v1/post --license licenses.txt"
   },
   "repository": {
     "type": "git",
