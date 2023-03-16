@@ -1,4 +1,4 @@
-# Metis Analysis
+# Metis Analysis Action 
 
 This GitHub action allows you to analyze your database infrastructure using the MetisData API.
 
