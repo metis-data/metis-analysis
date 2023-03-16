@@ -16440,7 +16440,7 @@ const path_1 = __nccwpck_require__(1017);
 const helper_1 = __nccwpck_require__(9958);
 console.log(__dirname);
 //
-const packageJson = JSON.parse((0, fs_1.readFileSync)((0, path_1.join)(__dirname, "../../package.json"), { encoding: "utf8" }));
+// const packageJson = JSON.parse((0, fs_1.readFileSync)((0, path_1.join)(__dirname, "../../package.json"), { encoding: "utf8" }));
 /**
  * Function to get duplicate relation names from given relations.
  *
@@ -16502,7 +16502,7 @@ class Db {
         return JSON.stringify({
             name: this.name,
             serverVersion: this.serverVersion,
-            version: packageJson.version,
+            version: '1.0.0',
             config: this._config,
             queryResults: this.queryResults,
         });
