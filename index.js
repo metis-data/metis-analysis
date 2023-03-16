@@ -9,7 +9,7 @@ const parse = require('pg-connection-string').parse;
 
 
 const getDbdetails = async (dbConnection) => {
-const dbDetails = dbDetailsFactory(serverConfig.connectionType);
+const dbDetails = dbDetailsFactory('postgres');
 
   let db = await dbDetails.getDbDetails(dbConnection, {
     includeSchemas: [],
