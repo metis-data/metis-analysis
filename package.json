@@ -1,6 +1,6 @@
 {
   "name": "metis-analysis",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "lets see",
   "main": "index.js",
   "scripts": {
