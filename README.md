@@ -15,7 +15,7 @@ To use this action, add the following YAML to your GitHub workflow:
 
 ```yaml
 - name: Metis Analysis
-  uses: <your-username>/<your-repo-name>@<release-tag>
+  uses: metis-data/metis-analysis@v1
   with:
     metis_api_key: ${{ secrets.METIS_API_KEY }}
     github_token: ${{ secrets.GITHUB_TOKEN }}
