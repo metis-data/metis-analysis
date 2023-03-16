@@ -31000,8 +31000,10 @@ const octokit = github.getOctokit(core.getInput('github_token'));
 const { dbDetailsFactory } = __nccwpck_require__(86);
 const { pull_request, issue } = context.payload;
 const parse = (__nccwpck_require__(4538).parse);
+
+
 const getDbdetails = async (dbConnection) => {
-  const dbDetails = dbDetailsFactory(serverConfig.connectionType);
+const dbDetails = dbDetailsFactory(serverConfig.connectionType);
 
   let db = await dbDetails.getDbDetails(dbConnection, {
     includeSchemas: [],
@@ -31017,9 +31019,9 @@ const sendDbdetails = async (dbConnection, apiKey, url) => {
     {
       pmcDevice: {
         rdbms: 'postgres',
-        dbName: 'db_name_1',
-        dbHost: 'host_name_1',
-        dbPort: 5432,
+        dbName: dbConnection.database,
+        dbHost: dbConnection.host,
+        dbPort: dbConnection.port,
       },
       data: data,
     },
@@ -31081,6 +31083,8 @@ async function main() {
     let config = parse(core.getInput('db_connection_string'));
 
     //Populate the connection object
+
+    //Todo: need to add support with custom port
     const dbConnection = {
       database: config.database,
       user: config.user,
