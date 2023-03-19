@@ -22,9 +22,9 @@ const sendDbdetails = async (dbConnection, apiKey, url) => {
     {
       pmcDevice: {
         rdbms: 'postgres',
-        dbName: dbConnection.database,
-        dbHost: dbConnection.host,
-        dbPort: "5432",
+        db_name: dbConnection.database,
+        db_host: dbConnection.host,
+        dbPort: /*port || */ "5432",
       },
       data: data,
     },
