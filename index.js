@@ -9,12 +9,9 @@ const parse = require('pg-connection-string').parse;
 
 const getDbdetails = async (dbConnection) => {
   const dbDetails = dbDetailsFactory('postgres');
-  console.log(dbConnection);
-  let db = await dbDetails.getDbDetails(dbConnection, {
-    includeSchemas: [],
-  });
-
-  return db | undefined;
+  const db = dbDetails.getDbDetails(dbConnection);
+  console.log(db);
+  return await db;
 };
 
 const sendDbdetails = async (dbConnection, apiKey, url) => {
@@ -108,7 +105,7 @@ async function main() {
       database: config.database,
       user: config.user,
       password: config.password,
-      host: config.host
+      host: config.host,
       /*
           Maybe will cause problem need to check:
           ssl, either a boolean or an object with properties
