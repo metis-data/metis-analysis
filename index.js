@@ -119,7 +119,7 @@ async function main() {
       */
       ssl: config.ssl,
     };
-    await createPmcDevice(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/pmc_device`)
+    await createPmcDevice(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/pmc-device`)
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/db-details`);
     // Send Extensions To backend.
     // Send Database config.
