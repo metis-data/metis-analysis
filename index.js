@@ -19,6 +19,7 @@ const getDbdetails = async (dbConnection) => {
 
 const sendDbdetails = async (dbConnection, apiKey, url) => {
   const data = await getDbdetails(dbConnection);
+  console.log(data);
   axiosPost(
     url,
     {
@@ -26,7 +27,7 @@ const sendDbdetails = async (dbConnection, apiKey, url) => {
         rdbms: 'postgres',
         dbName: dbConnection.database,
         dbHost: dbConnection.host,
-        dbPort: dbConnection.port,
+        dbPort: dbConnection.port || 5432,
       },
       data: data,
     },
