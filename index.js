@@ -108,7 +108,7 @@ async function main() {
       database: config.database,
       user: config.user,
       password: config.password,
-      host: config.host,
+      host: config.host
       /*
           Maybe will cause problem need to check:
           ssl, either a boolean or an object with properties
@@ -117,7 +117,7 @@ async function main() {
             key
             ca
       */
-      ssl: config?.ssl || { rejectUnauthorized: false },
+      // ssl: config?.ssl || { rejectUnauthorized: false },
     };
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`);
