@@ -24,7 +24,7 @@ const sendDbdetails = async (dbConnection, apiKey, url) => {
         rdbms: 'postgres',
         dbName: dbConnection.database,
         dbHost: dbConnection.host,
-        dbPort: dbConnection.port || 5432,
+        dbPort: "5432",
       },
       data: data,
     },
@@ -39,7 +39,7 @@ const createPmcDevice = async (dbConnection, apiKey, url) => {
       rdbms: 'postgres',
       db_name: dbConnection.database,
       db_host: dbConnection.host,
-      port: '5432',
+      port: "5432",
     },
     { 'x-api-key': apiKey }
   );
