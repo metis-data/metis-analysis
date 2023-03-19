@@ -7,9 +7,8 @@ const { dbDetailsFactory } = require('@metis-data/db-details');
 const { pull_request, issue } = context.payload;
 const parse = require('pg-connection-string').parse;
 
-
 const getDbdetails = async (dbConnection) => {
-const dbDetails = dbDetailsFactory('postgres');
+  const dbDetails = dbDetailsFactory('postgres');
 
   let db = await dbDetails.getDbDetails(dbConnection, {
     includeSchemas: [],
@@ -39,18 +38,18 @@ const createPmcDevice = async (dbConnection, apiKey, url) => {
   axiosPost(
     url,
     {
-        rdbms: 'postgres',
-        db_name: dbConnection.database,
-        db_host: dbConnection.host,
-        port: dbConnection.port || "5432",
+      rdbms: 'postgres',
+      db_name: dbConnection.database,
+      db_host: dbConnection.host,
+      port: dbConnection.port || '5432',
     },
     { 'x-api-key': apiKey }
   );
-}
+};
 
 const axiosPost = async (url, body, headers) => {
   try {
-    await axios.post(url, body, headers);
+    await axios.post(url, body, { headers: headers });
   } catch (error) {
     console.log(error);
   }
@@ -119,8 +118,8 @@ async function main() {
       */
       ssl: config.ssl,
     };
-    await createPmcDevice(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/pmc-device`)
-    await sendDbdetails(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/db-details`);
+    await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
+    await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`);
     // Send Extensions To backend.
     // Send Database config.
     // Query statistics (slow query log)
