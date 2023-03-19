@@ -35,6 +35,19 @@ const sendDbdetails = async (dbConnection, apiKey, url) => {
   );
 };
 
+const createPmcDevice = async (dbConnection, apiKey, url) => {
+  axiosPost(
+    url,
+    {
+        rdbms: 'postgres',
+        db_name: dbConnection.database,
+        db_host: dbConnection.host,
+        port: dbConnection.port,
+    },
+    { 'x-api-key': apiKey }
+  );
+}
+
 const axiosPost = async (url, body, headers) => {
   try {
     await axios.post(url, body, headers);
@@ -106,8 +119,8 @@ async function main() {
       */
       ssl: config.ssl,
     };
-    
-    sendDbdetails(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/db-details`);
+    await createPmcDevice(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/pmc_device`)
+    await sendDbdetails(dbConnection, core.getInput('metis_api_key'),`${core.getInput('target_url')}/api/db-details`);
     // Send Extensions To backend.
     // Send Database config.
     // Query statistics (slow query log)
