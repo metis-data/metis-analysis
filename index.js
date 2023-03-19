@@ -117,7 +117,7 @@ async function main() {
             key
             ca
       */
-      ssl: config?.ssl || true,
+      ssl: config?.ssl || { rejectUnauthorized: false },
     };
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`);
