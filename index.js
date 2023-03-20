@@ -119,7 +119,7 @@ async function main() {
       // ssl: config?.ssl || { rejectUnauthorized: false },
     };
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
-    const dbDetailsExtraData = getDbdetails(dbConnection);
+    const dbDetailsExtraData = await getDbdetails(dbConnection);
     console.log(dbDetailsExtraData);
 
     // dbDetails: this.dbDetails,
