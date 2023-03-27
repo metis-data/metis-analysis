@@ -6,7 +6,7 @@ const octokit = github.getOctokit(core.getInput('github_token'));
 const { dbDetailsFactory } = require('@metis-data/db-details');
 const { pull_request, issue } = context.payload;
 const parse = require('pg-connection-string').parse;
-
+const { LambdaClient, AddLayerVersionPermissionCommand, Lambda } = require('@aws-sdk/client-lambda');
 const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
   const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
@@ -106,8 +106,32 @@ const axiosPost = async (url, body, headers) => {
   }
 };
 
+const invokeLambda = async () => {
+  const lambda = new Lambda({
+    region: core.getInput('region'),
+    credentials: {
+      accessKeyId: core.getInput('access_key_id'),
+      secretAccessKey: core.getInput('secret_access_key'),
+    },
+  });
+
+  const params = {
+    FunctionName: core.getInput('function_name'),
+    // Payload: JSON.stringify(payload)
+  };
+
+  lambda.invoke(params, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(JSON.parse(data.Payload));
+    }
+  });
+};
+
 async function main() {
   try {
+    await invokeLambda();
     let config = parse(core.getInput('db_connection_string'));
     const metisApikey = core.getInput('metis_api_key');
     const metisExporterUrl = core.getInput('metis_exporter_url');
