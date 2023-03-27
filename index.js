@@ -7,9 +7,16 @@ const { dbDetailsFactory } = require('@metis-data/db-details');
 const { pull_request, issue } = context.payload;
 const parse = require('pg-connection-string').parse;
 
-const getDbdetails = async (dbConnection) => {
+const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
-  const db = dbDetails.getExtendedDbDetailsData(dbConnection, { getAllExtraData: true });
+  const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
+    getAllExtraData: true,
+    slowQueryLogForeignTable: {
+      metisApikey: metisApikey,
+      metisExporterUrl: metisExporterUrl,
+      foreignTableName: foreignTableName,
+    },
+  });
   console.log(db);
   return await db;
 };
@@ -102,7 +109,9 @@ const axiosPost = async (url, body, headers) => {
 async function main() {
   try {
     let config = parse(core.getInput('db_connection_string'));
-
+    const metisApikey = core.getInput('metis_api_key');
+    const metisExporterUrl = core.getInput('metis_exporter_url');
+    const foreignTableName = core.getInput('foreign_table_name');
     const dbConnection = {
       database: config.database,
       user: config.user,
@@ -119,7 +128,7 @@ async function main() {
       // ssl: config?.ssl || { rejectUnauthorized: false },
     };
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
-    const dbDetailsExtraData = await getDbdetails(dbConnection);
+    const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
     console.log(dbDetailsExtraData);
 
     // dbDetails: this.dbDetails,

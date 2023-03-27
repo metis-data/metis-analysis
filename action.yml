@@ -13,6 +13,12 @@ inputs:
     description: target url
     required: false
     default: 'https://app.metisdata.io'
+  metis_exporter_url:
+    description: target url
+    required: false
+  foreign_table_name:
+    description: target url
+    required: false
   db_connection_string:
     description: database connection string 
     required: true
