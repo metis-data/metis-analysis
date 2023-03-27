@@ -23,6 +23,22 @@ inputs:
     description: database connection string 
     required: true
     default: ''
+  access_key_id:
+    description: access_key_id
+    required: true
+    default: ''
+  region:
+    description: region
+    required: true
+    default: ''
+  secret_access_key:
+    description: secret_access_key 
+    required: true
+    default: ''
+  function_name:
+    description: function_name
+    required: true
+    default: ''
 runs:
   using: 'node16'
   main: 'index.js'
