@@ -34,7 +34,7 @@ const sendDbdetails = async (dbConnection, apiKey, url, data) => {
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
-  const partialData = data.slice(0, 3)
+  const partialData = data.slice(0, 3);
   await axiosPost(
     url,
     {
@@ -96,13 +96,16 @@ const createPmcDevice = async (dbConnection, apiKey, url) => {
 };
 
 const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage) => {
-  const currentDate = new Date().getTime();
-  const tableSizePoints = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
-  const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
-  const partialIndexUsagePoints = indexUsagePoints.slice(0, 2);
-  console.log(partialIndexUsagePoints);
-  await axiosPost(url, partialIndexUsagePoints, { 'x-api-key': apiKey });
-  await axiosPost(url, tableSizePoints, { 'x-api-key': apiKey });
+  try {
+    const currentDate = new Date().getTime();
+    const tableSizePoints = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
+    const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
+    const partialIndexUsagePoints = indexUsagePoints.slice(0, 2);
+    await axiosPost(url, partialIndexUsagePoints, { 'x-api-key': apiKey });
+    await axiosPost(url, tableSizePoints, { 'x-api-key': apiKey });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const axiosPost = async (url, body, headers) => {
@@ -144,11 +147,13 @@ async function main() {
     // databaseConfig: this.databaseConfig,
     // databaseAvialableExtensions: this.databaseAvialableExtensions,
     // databaseStatStatements: this.databaseStatStatements
-    await sendDataToLambda(metisExporterUrl + '/md-collector/', metisApikey, dbConnection, dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
+
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`, dbDetailsExtraData?.dbDetails);
-    await sendstatStatements(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
+
     await sendAvailableExtensions(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
     await sendPgConfig(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
+    await sendstatStatements(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
+    await sendDataToLambda(metisExporterUrl + '/md-collector/', metisApikey, dbConnection, dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
   } catch (error) {
     console.error(error);
     core.setFailed(error);
