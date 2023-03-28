@@ -48,7 +48,7 @@ const sendstatStatements = async (dbConnection, apiKey, url, data) => {
         db_host: dbConnection.host,
         dbPort: /*port || */ '5432',
       },
-      data: [data[0]],
+      data: data.slice(0,10),
     },
     { 'x-api-key': apiKey }
   );
@@ -104,8 +104,7 @@ const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage
   const tableSizePoints = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
   const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
 
-  const res = await axiosPost(url, indexUsagePoints, { 'x-api-key': apiKey });
-  console.log(res);
+  await axiosPost(url, indexUsagePoints.slice(0,10), { 'x-api-key': apiKey });
   await axiosPost(url, tableSizePoints, { 'x-api-key': apiKey });
 };
 
