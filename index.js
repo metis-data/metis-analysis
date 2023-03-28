@@ -39,6 +39,7 @@ const sendDbdetails = async (dbConnection, apiKey, url, data) => {
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
+  const partialData = data.slice(0, 3)
   axiosPost(
     url,
     {
@@ -48,7 +49,7 @@ const sendstatStatements = async (dbConnection, apiKey, url, data) => {
         db_host: dbConnection.host,
         dbPort: /*port || */ '5432',
       },
-      data: data.slice(0, 10),
+      data: partialData,
     },
     { 'x-api-key': apiKey }
   );
