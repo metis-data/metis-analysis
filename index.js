@@ -100,23 +100,13 @@ const createPmcDevice = async (dbConnection, apiKey, url) => {
 };
 
 const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage) => {
-  const currentDate = (new Date()).getTime();
-  const tableSizePoints  = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
+  const currentDate = new Date().getTime();
+  const tableSizePoints = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
   const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
-
- await axiosPost(
-   url,
-   tableSizePoints,
-   { 'x-api-key': apiKey }
- );
-
- await axiosPost(
-   url,
-   indexUsagePoints,
-   { 'x-api-key': apiKey }
- );
-}
-
+  console.log(indexUsagePoints[0]);
+  await axiosPost(url, indexUsagePoints, { 'x-api-key': apiKey });
+  await axiosPost(url, tableSizePoints, { 'x-api-key': apiKey });
+};
 
 const axiosPost = async (url, body, headers) => {
   try {
@@ -125,9 +115,6 @@ const axiosPost = async (url, body, headers) => {
     console.log(error);
   }
 };
-
-
-
 
 async function main() {
   try {
@@ -151,7 +138,6 @@ async function main() {
       // ssl: config?.ssl || { rejectUnauthorized: false },
     };
 
-   
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
     // console.log(dbDetailsExtraData);
