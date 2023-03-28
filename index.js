@@ -99,6 +99,25 @@ const createPmcDevice = async (dbConnection, apiKey, url) => {
   );
 };
 
+const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage) => {
+  const currentDate = (new Date()).getTime();
+  const tableSizePoints  = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
+  const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
+
+ await axiosPost(
+   url,
+   tableSizePoints,
+   { 'x-api-key': apiKey }
+ );
+
+ await axiosPost(
+   url,
+   indexUsagePoints,
+   { 'x-api-key': apiKey }
+ );
+}
+
+
 const axiosPost = async (url, body, headers) => {
   try {
     await axios.post(url, body, { headers: headers });
@@ -107,23 +126,6 @@ const axiosPost = async (url, body, headers) => {
   }
 };
 
-const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage) => {
-   const currentDate = (new Date()).getTime();
-   const tableSizePoints  = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
-   const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
-
-  await axiosPost(
-    url,
-    tableSizePoints,
-    { 'x-api-key': apiKey }
-  );
-
-  await axiosPost(
-    url,
-    indexUsagePoints,
-    { 'x-api-key': apiKey }
-  );
-}
 
 
 
