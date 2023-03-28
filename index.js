@@ -160,7 +160,7 @@ async function main() {
     // databaseConfig: this.databaseConfig,
     // databaseAvialableExtensions: this.databaseAvialableExtensions,
     // databaseStatStatements: this.databaseStatStatements
-    await sendDataToLambda(metisExporterUrl + 'md-collector/', metisApikey, dbConnection, dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
+    await sendDataToLambda(metisExporterUrl + '/md-collector/', metisApikey, dbConnection, dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`, dbDetailsExtraData?.dbDetails);
     await sendstatStatements(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
     await sendAvailableExtensions(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
