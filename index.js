@@ -124,7 +124,7 @@ const invokeLambda = async () => {
     if (err) {
       console.log(err);
     } else {
-      console.log(JSON.parse(data.Payload));
+       console.log(JSON.parse(data.Payload));
     }
   });
 };
@@ -153,7 +153,7 @@ async function main() {
     };
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-    console.log(dbDetailsExtraData);
+    // console.log(dbDetailsExtraData);
 
     // dbDetails: this.dbDetails,
     // databaseConfig: this.databaseConfig,
