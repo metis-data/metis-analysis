@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const TAGS = new Set(['schema', 'table', 'index']);
 
-export const processRows =  (databaseName, databaseHost, queryResult, timestamp) =>  {
+ const processRows =  (databaseName, databaseHost, queryResult, timestamp) =>  {
   const metricsData = [];
   queryResult.forEach((row) => {
     const valueNames = Object.keys(row).filter((key) => !TAGS.has(key));
@@ -25,8 +25,10 @@ export const processRows =  (databaseName, databaseHost, queryResult, timestamp)
   return metricsData;
 }
 
-export  const processResults = (databaseName, databaseHost, results, timestamp) => {
+  const processResults = (databaseName, databaseHost, results, timestamp) => {
   const res = results.map((queryResult) => processRows(databaseName, databaseHost, queryResult, timestamp));
 
   return res;
 }
+
+module.exports = { processResults };
