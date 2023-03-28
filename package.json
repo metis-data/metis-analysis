@@ -25,6 +25,7 @@
     "@metis-data/db-details": "2.5.0",
     "axios": "^1.2.2",
     "octokit": "^2.0.10",
-    "pg-connection-string": "^2.5.0"
+    "pg-connection-string": "^2.5.0",
+    "uuid": "^9.0.0"
   }
 }

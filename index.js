@@ -17,9 +17,10 @@ const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreign
       foreignTableName: foreignTableName,
     },
   });
-  console.log(db);
   return await db;
 };
+
+const { processResults } = require('./reports');
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
   axiosPost(
@@ -106,32 +107,28 @@ const axiosPost = async (url, body, headers) => {
   }
 };
 
-const invokeLambda = async () => {
-  const lambda = new Lambda({
-    region: core.getInput('region'),
-    credentials: {
-      accessKeyId: core.getInput('access_key_id'),
-      secretAccessKey: core.getInput('secret_access_key'),
-    },
-  });
+const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage) => {
+   const currentDate = (new Date()).getTime();
+   const tableSizePoints  = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
+   const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
 
-  const params = {
-    FunctionName: core.getInput('function_name'),
-    // Payload: JSON.stringify(payload)
-  };
+  await axiosPost(
+    url,
+    tableSizePoints,
+    { 'x-api-key': apiKey }
+  );
 
-  lambda.invoke(params, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-       console.log(JSON.parse(data.Payload));
-    }
-  });
-};
+  await axiosPost(
+    url,
+    indexUsagePoints,
+    { 'x-api-key': apiKey }
+  );
+}
+
+
 
 async function main() {
   try {
-    await invokeLambda();
     let config = parse(core.getInput('db_connection_string'));
     const metisApikey = core.getInput('metis_api_key');
     const metisExporterUrl = core.getInput('metis_exporter_url');
@@ -151,6 +148,8 @@ async function main() {
       */
       // ssl: config?.ssl || { rejectUnauthorized: false },
     };
+
+   
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
     // console.log(dbDetailsExtraData);
@@ -159,6 +158,7 @@ async function main() {
     // databaseConfig: this.databaseConfig,
     // databaseAvialableExtensions: this.databaseAvialableExtensions,
     // databaseStatStatements: this.databaseStatStatements
+    await sendDataToLambda(metisExporterUrl + 'md-collector/', metisApikey, dbConnection, dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`, dbDetailsExtraData?.dbDetails);
     await sendstatStatements(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
     await sendAvailableExtensions(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
