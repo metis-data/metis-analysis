@@ -1,12 +1,7 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
 const axios = require('axios');
-const { context } = require('@actions/github');
-const octokit = github.getOctokit(core.getInput('github_token'));
 const { dbDetailsFactory } = require('@metis-data/db-details');
-const { pull_request, issue } = context.payload;
 const parse = require('pg-connection-string').parse;
-const { LambdaClient, AddLayerVersionPermissionCommand, Lambda } = require('@aws-sdk/client-lambda');
 const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
   const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
@@ -23,7 +18,7 @@ const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreign
 const { processResults } = require('./reports');
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
-  axiosPost(
+  await axiosPost(
     url,
     {
       pmcDevice: {
@@ -40,7 +35,7 @@ const sendDbdetails = async (dbConnection, apiKey, url, data) => {
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
   const partialData = data.slice(0, 3)
-  axiosPost(
+  await axiosPost(
     url,
     {
       pmcDevice: {
@@ -56,7 +51,7 @@ const sendstatStatements = async (dbConnection, apiKey, url, data) => {
 };
 
 const sendAvailableExtensions = async (dbConnection, apiKey, url, data) => {
-  axiosPost(
+  await axiosPost(
     url,
     {
       pmcDevice: {
@@ -72,7 +67,7 @@ const sendAvailableExtensions = async (dbConnection, apiKey, url, data) => {
 };
 
 const sendPgConfig = async (dbConnection, apiKey, url, data) => {
-  axiosPost(
+  await axiosPost(
     url,
     {
       pmcDevice: {
@@ -88,7 +83,7 @@ const sendPgConfig = async (dbConnection, apiKey, url, data) => {
 };
 
 const createPmcDevice = async (dbConnection, apiKey, url) => {
-  axiosPost(
+  await axiosPost(
     url,
     {
       rdbms: 'postgres',
