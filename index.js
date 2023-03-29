@@ -34,20 +34,23 @@ const sendDbdetails = async (dbConnection, apiKey, url, data) => {
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
-  const partialData = data.slice(0, 3);
-  await axiosPost(
-    url,
-    {
-      pmcDevice: {
-        rdbms: 'postgres',
-        db_name: dbConnection.database,
-        db_host: dbConnection.host,
-        dbPort: /*port || */ '5432',
+  try {
+    await axiosPost(
+      url,
+      {
+        pmcDevice: {
+          rdbms: 'postgres',
+          db_name: dbConnection.database,
+          db_host: dbConnection.host,
+          dbPort: /*port || */ '5432',
+        },
+        data: data,
       },
-      data: partialData,
-    },
-    { 'x-api-key': apiKey }
-  );
+      { 'x-api-key': apiKey }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const sendAvailableExtensions = async (dbConnection, apiKey, url, data) => {
@@ -100,8 +103,8 @@ const sendDataToLambda = async (url, apiKey, dbConnection, tableSize, indexUsage
     const currentDate = new Date().getTime();
     const tableSizePoints = processResults(dbConnection.database, dbConnection.host, tableSize, currentDate);
     const indexUsagePoints = processResults(dbConnection.database, dbConnection.host, indexUsage, currentDate);
-    const partialIndexUsagePoints = indexUsagePoints.slice(0, 2);
-    await axiosPost(url, partialIndexUsagePoints, { 'x-api-key': apiKey });
+
+    await axiosPost(url, indexUsagePoints, { 'x-api-key': apiKey });
     await axiosPost(url, tableSizePoints, { 'x-api-key': apiKey });
   } catch (error) {
     console.log(error);
