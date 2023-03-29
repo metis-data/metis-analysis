@@ -131,26 +131,12 @@ async function main() {
       user: config.user,
       password: config.password,
       host: config.host,
-      /*
-          Maybe will cause problem need to check:
-          ssl, either a boolean or an object with properties
-            rejectUnauthorized
-            cert
-            key
-            ca
-      */
       // ssl: config?.ssl || { rejectUnauthorized: false },
     };
 
     await createPmcDevice(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc-device`);
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-    // console.log(dbDetailsExtraData);
-
-    // dbDetails: this.dbDetails,
-    // databaseConfig: this.databaseConfig,
-    // databaseAvialableExtensions: this.databaseAvialableExtensions,
-    // databaseStatStatements: this.databaseStatStatements
-
+  
     await sendDbdetails(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/db-details`, dbDetailsExtraData?.dbDetails);
 
     await sendAvailableExtensions(dbConnection, core.getInput('metis_api_key'), `${core.getInput('target_url')}/api/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
