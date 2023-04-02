@@ -16,6 +16,7 @@ inputs:
   metis_exporter_url:
     description: target url
     required: false
+    default: 'https://ingest.metisdata.io'
   foreign_table_name:
     description: foreign_table_name
     required: false
