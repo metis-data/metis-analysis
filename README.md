@@ -29,3 +29,24 @@ The name of the table where the slow query log is saved. If not set, the slow qu
 
 ### Outputs
 This GitHub Action has no outputs.
+
+
+### Usage 
+
+```
+name: METIS ANALYSIS ACTION EXAMPLE
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Metis Analysis Data Collector
+        uses: metis-data/metis-analysis@v1
+        with:
+          metis_api_key: ${{ secrets.METIS_API_KEY }} 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          db_connection_string: ${{ secrets.DB_CONNECTION_STRING }}
+```
