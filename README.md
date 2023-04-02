@@ -1,5 +1,5 @@
 [![metis](https://static-asserts-public.s3.eu-central-1.amazonaws.com/metis-min-logo.png)](https://www.metisdata.io/)
-### PostgreSQL Database Details to Metis GitHub Action
+### Metis Analysis GitHub Action -  PostgreSQL Database Details Collector    
 
 ##### This GitHub Action collects and sends various PostgreSQL database details to  Metis. It can collect the following:
 
