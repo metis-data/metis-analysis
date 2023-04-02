@@ -4,7 +4,7 @@ const { dbDetailsFactory } = require('@metis-data/db-details');
 const parse = require('pg-connection-string').parse;
 const { processResults } = require('./reports');
 
-const DIALECT = 'postgres'; 
+const DIALECT = 'postgres';
 
 const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
@@ -20,7 +20,6 @@ const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreign
 
   return await db;
 };
-
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
   await sendDataToMetis(dbConnection, apiKey, url, data);
@@ -49,13 +48,13 @@ const createPmcDevice = async (dbConnection, apiKey, url) => {
       rdbms: DIALECT,
       db_name: dbConnection.database,
       db_host: dbConnection.host,
-      port: dbConnection.port,
+      port: dbConnection.port || '5432',
     },
     { 'x-api-key': apiKey }
   );
 };
 
-const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url , tableSize, indexUsage) => {
+const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url, tableSize, indexUsage) => {
   try {
     const options = { 'x-api-key': apiKey };
     const currentDate = new Date().getTime();
@@ -70,21 +69,19 @@ const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url , tableSize,
 };
 
 const sendDataToMetis = async (dbConnection, apiKey, url, data) => {
-  
   const body = {
     pmcDevice: {
       rdbms: DIALECT,
       db_name: dbConnection.database,
       db_host: dbConnection.host,
-      dbPort: dbConnection.port,
+      dbPort: dbConnection.port || '5432',
     },
     data: data,
-  }
+  };
   const options = { 'x-api-key': apiKey };
 
   await axiosPost(url, body, options);
-
-}
+};
 
 const axiosPost = async (url, body, headers) => {
   try {
@@ -94,7 +91,6 @@ const axiosPost = async (url, body, headers) => {
     console.log(error);
   }
 };
-
 
 async function main() {
   try {
@@ -135,7 +131,7 @@ async function main() {
         g. Database configuration.
     */
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-    const {dbDetails, databaseAvialableExtensions, databaseConfig, databaseStatStatements, tableSize, indexUsage } = dbDetailsExtraData
+    const { dbDetails, databaseAvialableExtensions, databaseConfig, databaseStatStatements, tableSize, indexUsage } = dbDetailsExtraData;
     /*
      Send schemas structure.
     */
@@ -144,18 +140,18 @@ async function main() {
      Send available extensions.
     */
     await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, databaseAvialableExtensions);
-     /*
+    /*
      Send database configuration.
     */
     await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, databaseConfig);
-     /*
+    /*
      Send query statistics.
     */
     await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, databaseStatStatements);
-     /*
+    /*
      Send Table statistics and index usage.
     */
-    await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/' , tableSize, indexUsage);
+    await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', tableSize, indexUsage);
   } catch (error) {
     console.error(error);
     core.setFailed(error);
