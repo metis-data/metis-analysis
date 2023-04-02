@@ -1,23 +1,30 @@
-# Metis Analysis Action 
+### PostgreSQL Database Details to Metis GitHub Action
 
-This GitHub action allows you to analyze your database infrastructure using the MetisData API.
+##### This GitHub Action collects and sends various PostgreSQL database details to  Metis. It can collect the following:
 
-## Inputs
+ - Schemas structure
+ - Available Extensions
+ - Query statistics
+ - Table statistics
+ - Index Usage
+ - Slow query log
+ - Database configuration
 
-- `metis_api_key` (required): MetisData API key for your project.
-- `github_token` (required): GitHub personal access token for the action to be able to commit the analysis results back to the repository.
-- `target_url` (optional): Target URL for the MetisData API. Defaults to `https://app.metisdata.io`.
-- `db_connection_string` (required): Connection string for your database.
+### Inputs
+ - db_connection_string (required)
+The connection string of the database you want to monitor.
 
-## Usage
+ - metis_api_key (required)
+The API key for the Metis service you want to send the database details to.
 
-To use this action, add the following YAML to your GitHub workflow:
+ - metis_exporter_url (required)
+The URL for the Metis exporter.
 
-```yaml
-- name: Metis Analysis
-  uses: metis-data/metis-analysis@v1
-  with:
-    metis_api_key: ${{ secrets.METIS_API_KEY }}
-    github_token: ${{ secrets.GITHUB_TOKEN }}
-    db_connection_string: ${{ secrets.DB_CONNECTION_STRING }}
-```
+ - target_url (required)
+The URL for your Metis instance.
+
+ - foreign_table_name
+The name of the table where the slow query log is saved. If not set, the slow query log data will not be collected.
+
+### Outputs
+This GitHub Action has no outputs.
