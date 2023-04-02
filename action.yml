@@ -1,6 +1,5 @@
 name: 'PostgreSQL Metadata Collector'
-description: 'The process of collecting metadata from a database involves gathering information about the database schema, tables, columns, relationships, and constraints. This metadata is then analyzed to identify patterns, trends, and anomalies within the data. Insights are then produced based on the analysis, which can help to inform decision-making, improve data quality, and optimize database performance. This process is commonly used in data profiling, data governance,
- and data management initiatives.'
+description: 'Collect DB metadata, analyzes it and generate insights'
 inputs:
   metis_api_key:
     description: metis api key project identifier
