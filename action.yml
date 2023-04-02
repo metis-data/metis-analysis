@@ -1,4 +1,4 @@
-name: 'Metis Analysis'
+name: 'Postgres Meta Data Collector'
 description: 'Analysis database infrastructure'
 inputs:
   metis_api_key:
