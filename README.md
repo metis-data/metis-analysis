@@ -12,20 +12,15 @@
  - Database configuration
 
 ### Inputs
- - db_connection_string (required)
-The connection string of the database you want to monitor.
+ - db_connection_string: The connection string of the database you want to monitor.
 
- - metis_api_key (required)
-The API key for the Metis service you want to send the database details to.
+ - metis_api_key: The API key for the Metis service you want to send the database details to.
 
- - metis_exporter_url (required)
-The URL for the Metis exporter.
+ - metis_exporter_url: The URL for the Metis exporter.
 
- - target_url (required)
-The URL for your Metis instance.
+ - target_url: The URL for your Metis instance.
 
- - foreign_table_name
-The name of the table where the slow query log is saved. If not set, the slow query log data will not be collected.
+ - foreign_table_name: The name of the table where the slow query log is saved.   If  not set, the slow query log data will not be collected.
 
 ### Outputs
 This GitHub Action has no outputs.
