@@ -17,9 +17,10 @@ inputs:
     description: target url
     required: false
     default: 'https://ingest.metisdata.io'
-  foreign_table_name:
-    description: foreign_table_name
+  get_extra_data:
+    description: get_extra_data
     required: false
+    default: false
   db_connection_string:
     description: database connection string 
     required: true
