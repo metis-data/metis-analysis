@@ -9,8 +9,8 @@ const DIALECT = 'postgres';
 const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
   const getAllExtraData = core.getInput('get_extra_data') || false;
-  const db = true ? dbDetails.getDbDetails(dbConnection) : dbDetails.getExtendedDbDetailsData(dbConnection, {
-    getAllExtraData: getAllExtraData,
+  const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
+    getAllExtraData: false,
   });
 
   return await db;
@@ -126,27 +126,27 @@ async function main() {
         g. Database configuration.
     */
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-    const { dbDetails, databaseAvialableExtensions, databaseConfig, databaseStatStatements, tableSize, indexUsage } = dbDetailsExtraData;
+
     /*
      Send schemas structure.
     */
-    await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetails);
+    await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
     /*
      Send available extensions.
     */
-    await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, databaseAvialableExtensions);
+    await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
     /*
      Send database configuration.
     */
-    await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, databaseConfig);
+    await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
     /*
      Send query statistics.
     */
-    await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, databaseStatStatements);
+    await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
     /*
      Send Table statistics and index usage.
     */
-    await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', tableSize, indexUsage);
+    await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
   } catch (error) {
     console.error(error);
     core.setFailed(error);
