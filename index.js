@@ -16,8 +16,33 @@ const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreign
   return await db;
 };
 
+/*
+data: '{"pmcDevice":{"rdbms":"postgres","db_name":"bee_hero","db_host":"database-2.cofhrj7zmyn4.eu-central-1.rds.amazonaws.com","dbPort":"5432"},"data":[{"name":"public","tables":[{"name":"alembic_version","schemaName":"public","tableId":744857,"columns":[{"name":"version_num","dataType":"character varying","internalName":"varchar","isNull":false,"length":32,"isForeignKey":false,"isPrimaryKey":true,"fullCatalogName":"database.public.alembic_version.version_num","indexes":[{"name":"alembic_version_pkc"}]}],"indexes":[{"name":"alembic_version_pkc","relatedColumns":[{"name":"version_num","dataType":"character varying","internalName":"varchar","isNull":false,"length":32,"isForeignKey":false,"isPrimaryKey":true,"fullCatalogName":"database.public.alembic_version.version_num","indexes":[{"name":"alembic_version_pkc"}]}],"relatedExpressions":[]}],"constraints":[{"name":"alembic_version_pkc","type":"PrimaryKey","schema":"public"}],"triggers":[],"pkData":{"name":"alembic_version_pkc","columns":[{"name":"version_num","dataType":"character varying","internalName":"varchar","isNull":false,"length":32,"isForeignKey":false,"isPrimaryKey":true,"fullCatalogName":"database.public.alembic_version.version_num","indexes":[{"name":"alembic_version_pkc"}]}],"sizeInBytes":0,"numOfColumns":1},"pk":"alembic_version_pkc","fk":[],"table_name":"alembic_version","full_table_name":"public.alembic_version","dead_rows":0,"n_mod_since_analyze":"0","pct_mod_since_analyze":"0","last_analyze_date":null,"last_autoanalyze_date":null,"total_table_size_kb":"8","table_size_kb":"0","indexes_size_kb":"8",
+"total_table_size_pretty":"8192 bytes","table_size_pretty":"0 bytes","index_size_pretty":"8192 bytes","rows":0,"pages":0},
+
+*/
+
+function splitArrayIntoChunks(array, chunkSize) {
+  const result = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+  return result;
+}
+
+
+
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
-  await sendDataToMetis(dbConnection, apiKey, url, data);
+  if(data > 50) {
+    const chunkSize = 50;
+    const result = splitArrayIntoChunks(data, chunkSize);
+    await Promise.all(result.map(async (item) => {
+    await sendDataToMetis(dbConnection, apiKey, url, item);
+    }))
+  } else {
+    await sendDataToMetis(dbConnection, apiKey, url, data);
+  }
+  
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
