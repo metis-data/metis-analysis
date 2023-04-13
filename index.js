@@ -42,7 +42,8 @@ const getChunks = (schemaName, tables) => {
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
 
   const chunks = data.reduce((acc, cur) => {
-    acc = acc.concat(getChunks(cur.name, cur.tables))
+    acc = acc.concat(getChunks(cur.name, cur.tables));
+    return acc;
   }, [])
  
   
