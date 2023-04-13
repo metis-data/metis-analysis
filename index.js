@@ -35,7 +35,9 @@ function splitArrayIntoChunks(array, chunkSize) {
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
   if(data > 50) {
     const chunkSize = 50;
+
     const result = splitArrayIntoChunks(data, chunkSize);
+    core.info(`result length: ${result.length}`)
     await Promise.all(result.map(async (item) => {
     await sendDataToMetis(dbConnection, apiKey, url, item);
     }))
