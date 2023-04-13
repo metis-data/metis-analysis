@@ -8,14 +8,9 @@ const DIALECT = 'postgres';
 
 const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
-  const getExtraData = core.getInput('get_extra_data');
+  const getAllExtraData = core.getInput('get_extra_data') || false;
   const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
-    getAllExtraData: getExtraData,
-    slowQueryLogForeignTable: {
-      metisApikey: metisApikey,
-      metisExporterUrl: metisExporterUrl,
-      foreignTableName: foreignTableName,
-    },
+    getAllExtraData: getAllExtraData,
   });
 
   return await db;
