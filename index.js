@@ -33,7 +33,7 @@ function splitArrayIntoChunks(array, chunkSize) {
 
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
-  if(data > 50) {
+  if(data.length > 50) {
     const chunkSize = 50;
 
     const result = splitArrayIntoChunks(data, chunkSize);
@@ -161,19 +161,19 @@ async function main() {
     /*
      Send available extensions.
     */
-    await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
-    /*
-     Send database configuration.
-    */
-    await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
-    /*
-     Send query statistics.
-    */
-    await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
-    /*
-     Send Table statistics and index usage.
-    */
-    await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
+    // await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
+    // /*
+    //  Send database configuration.
+    // */
+    // await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
+    // /*
+    //  Send query statistics.
+    // */
+    // await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
+    // /*
+    //  Send Table statistics and index usage.
+    // */
+    // await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
   } catch (error) {
     console.error(error);
     core.setFailed(error);
