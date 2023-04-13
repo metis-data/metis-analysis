@@ -31,21 +31,24 @@ function splitArrayIntoChunks(array, chunkSize) {
 }
 
 
+const getChunks = (schemaName, tables) => {
+  const result = splitArrayIntoChunks(data, 25);
+  return result.map((res) => ({
+    name: schemaName,
+    tables: res
+  }))
+}
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
-  core.info(`type of data: ${typeof data}`)
-  if(data.length > 50) {
-    const chunkSize = 50;
 
-    const result = splitArrayIntoChunks(data, chunkSize);
-    core.info(`result length: ${result.length}`)
-    await Promise.all(result.map(async (item) => {
-    await sendDataToMetis(dbConnection, apiKey, url, item);
-    }))
-  } else {
-    await sendDataToMetis(dbConnection, apiKey, url, data);
-  }
+  const chunks = data.reduce((acc, cur) => {
+    acc = acc.concat(getChunks(cur.name, cur.tables))
+  }, [])
+ 
   
+  let results:  = await Promise.all(chunks.map(async (data): Promise<any> => {
+    await sendDataToMetis(dbConnection, apiKey, url, data);
+  }));
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
