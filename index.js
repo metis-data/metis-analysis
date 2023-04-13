@@ -33,7 +33,7 @@ function splitArrayIntoChunks(array, chunkSize) {
 
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
-  core.info(`type of data: ${type of data}`)
+  core.info(`type of data: ${typeof data}`)
   if(data.length > 50) {
     const chunkSize = 50;
 
