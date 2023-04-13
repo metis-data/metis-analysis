@@ -9,7 +9,7 @@ const DIALECT = 'postgres';
 const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
   const dbDetails = dbDetailsFactory('postgres');
   const getAllExtraData = core.getInput('get_extra_data') || false;
-  const db = !getAllExtraData ? dbDetails.getDbDetails(dbConnection) : dbDetails.getExtendedDbDetailsData(dbConnection, {
+  const db = true ? dbDetails.getDbDetails(dbConnection) : dbDetails.getExtendedDbDetailsData(dbConnection, {
     getAllExtraData: getAllExtraData,
   });
 
