@@ -32,7 +32,7 @@ function splitArrayIntoChunks(array, chunkSize) {
 
 
 const getChunks = (schemaName, tables) => {
-  const result = splitArrayIntoChunks(tables, 25);
+  const result = splitArrayIntoChunks(tables, 10);
   return result.map((res) => ({
     name: schemaName,
     tables: res
