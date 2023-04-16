@@ -30,26 +30,24 @@ function splitArrayIntoChunks(array, chunkSize) {
   return result;
 }
 
-
 const getChunks = (schemaName, tables) => {
   const result = splitArrayIntoChunks(tables, 50);
   return result.map((res) => ({
     name: schemaName,
-    tables: res
-  }))
-}
+    tables: res,
+  }));
+};
 
 const sendDbdetails = async (dbConnection, apiKey, url, data) => {
+  // const chunks = data.reduce((acc, cur) => {
+  //   acc = acc.concat(getChunks(cur.name, cur.tables));
+  //   return acc;
+  // }, [])
 
-  const chunks = data.reduce((acc, cur) => {
-    acc = acc.concat(getChunks(cur.name, cur.tables));
-    return acc;
-  }, [])
- 
-  
-  let results = await Promise.all(chunks.map(async (dataToSend) => {
-    await sendDataToMetis(dbConnection, apiKey, url, [dataToSend]);
-  }));
+  // let results = await Promise.all(chunks.map(async (dataToSend) => {
+  //   await sendDataToMetis(dbConnection, apiKey, url, [dataToSend]);
+  // }));
+  await sendDataToMetis(dbConnection, apiKey, url, data);
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
