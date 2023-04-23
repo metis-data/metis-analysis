@@ -118,9 +118,9 @@ const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url, tableSize, 
     await axiosPost(url, indexUsagePoints, options);
     await axiosPost(url, tableSizePoints, options);
   } catch (error) {
-    console.log('*************** TABLE SIZE AND INDEX USAGE *****************');
-    console.log(error);
-    console.log('*************** TABLE SIZE AND INDEX USAGE *****************');
+    console.info('*************** TABLE SIZE AND INDEX USAGE *****************');
+    console.info(error);
+    console.info('*************** TABLE SIZE AND INDEX USAGE *****************');
     //  handleAxiosError(error);
   }
 };
