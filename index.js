@@ -183,8 +183,8 @@ async function main() {
      Send available extensions.
     */
    core.info(JSON.stringify(dbDetailsExtraData?.databaseAvialableExtensions))
-     dbDetailsExtraData?.databaseAvialableExtensions && await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
-    /*
+     dbDetailsExtraData?.databaseAvailableExtensions && await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
+    /*databaseAvailableExtensions
      Send database configuration.
     */
      dbDetailsExtraData?.databaseConfig && await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
