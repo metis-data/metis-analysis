@@ -123,18 +123,24 @@ const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url, tableSize, 
 };
 
 const sendDataToMetis = async (dbConnection, apiKey, url, data) => {
-  const body = {
-    pmcDevice: {
-      rdbms: DIALECT,
-      db_name: dbConnection.database,
-      db_host: dbConnection.host,
-      dbPort: dbConnection.port || '5432',
-    },
-    data: data,
-  };
-  const options = { 'x-api-key': apiKey };
-
-  await axiosPost(url, body, options);
+  try {
+    const body = {
+      pmcDevice: {
+        rdbms: DIALECT,
+        db_name: dbConnection.database,
+        db_host: dbConnection.host,
+        dbPort: dbConnection.port || '5432',
+      },
+      data: data,
+    };
+    const options = { 'x-api-key': apiKey };
+  
+    await axiosPost(url, body, options);
+  }
+  catch (error) {
+    console.log(error)
+  }
+  
 };
 
 const axiosPost = async (url, body, headers) => {
@@ -189,26 +195,25 @@ async function main() {
      Send schemas structure.
     */
 
-    dbDetailsExtraData?.dbDetails && (await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails));
+    await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
     /*
      Send available extensions.
     */
 
-    dbDetailsExtraData?.databaseAvailableExtensions &&
-      (await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvailableExtensions));
+      await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvailableExtensions);
     /*
      Send database configuration.
     */
-    dbDetailsExtraData?.databaseConfig && (await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig));
+    await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
+     /*
+     Send Table statistics and index usage.
+    */
+     await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
     /*
      Send query statistics.
     */
-    dbDetailsExtraData?.databaseStatStatements && (await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements));
-    /*
-     Send Table statistics and index usage.
-    */
-    (dbDetailsExtraData?.tableSize || dbDetailsExtraData?.indexUsage) &&
-      (await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage));
+    await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
+   
   } catch (error) {
     console.log(error);
     core.setFailed(error);
