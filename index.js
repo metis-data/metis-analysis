@@ -8,11 +8,10 @@ const DIALECT = 'postgres';
 
 const getDbdetails = async (dbConnection) => {
   const dbDetails = dbDetailsFactory('postgres');
-  const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
-    getAllExtraData: true,
-  });
-
-  return await db;
+  const db = dbDetails.getExtendedDbDetailsData(dbConnection, {getAllExtraData: true});
+  const data = await db;
+  core.info(JSON.stringify(data))
+  return await data;
 };
 
 /*
@@ -107,7 +106,7 @@ const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url, tableSize, 
     await axiosPost(url, indexUsagePoints, options);
     await axiosPost(url, tableSizePoints, options);
   } catch (error) {
-    handleAxiosError(error);
+    // handleAxiosError(error);
   
   }
 };
