@@ -6,11 +6,10 @@ const { processResults } = require('./reports');
 
 const DIALECT = 'postgres';
 
-const getDbdetails = async (dbConnection, metisApikey, metisExporterUrl, foreignTableName) => {
+const getDbdetails = async (dbConnection) => {
   const dbDetails = dbDetailsFactory('postgres');
-  const getAllExtraData = core.getInput('get_extra_data') || false;
   const db = dbDetails.getExtendedDbDetailsData(dbConnection, {
-    getAllExtraData: false,
+    getAllExtraData: true,
   });
 
   return await db;
@@ -152,7 +151,6 @@ async function main() {
         c. Query statistics.
         d. Table statistics.
         e. Index Usage.
-        f. Slow query log.
         g. Database configuration.
     */
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
