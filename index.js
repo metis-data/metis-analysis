@@ -175,27 +175,27 @@ async function main() {
         g. Database configuration.
     */
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-    console.log(JSON.stringify(dbDetailsExtra.DatadatabaseAvialableExtensions));
+   
     /*
      Send schemas structure.
     */
-     await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
+     dbDetailsExtraData?.dbDetails && await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
     /*
      Send available extensions.
     */
-    await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
+     dbDetailsExtraData?.databaseAvialableExtensions && await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
     /*
-     Send database configu-*ration.
+     Send database configuration.
     */
-    await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
+     dbDetailsExtraData?.databaseConfig && await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
     /*
      Send query statistics.
     */
-    await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
+     dbDetailsExtraData?.databaseConfig && await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
     /*
      Send Table statistics and index usage.
     */
-    await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
+     (dbDetailsExtraData?.tableSize  || dbDetailsExtraData?.indexUsage) && await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
   } catch (error) {
     // handleAxiosError(error);
     core.setFailed(error);
