@@ -45,7 +45,7 @@ const sendDbdetails = async (dbConnection, apiKey, url, data) => {
   // }, [])
 
   // let results = await Promise.all(chunks.map(async (dataToSend) => {
-  //   await sendDataToMetis(dbConnection, apiKey, url, [dataToSend]);
+  //   aw®`ait sendDataToMetis(dbConnection, apiKey, url, [dataToSend]);
   // }));
   await sendDataToMetis(dbConnection, apiKey, url, data);
 };
