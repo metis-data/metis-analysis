@@ -132,7 +132,8 @@ const axiosPost = async (url, body, headers) => {
     const res = await axios.post(url, body, { headers: headers });
     return res;
   } catch (error) {
-    console.log(error);
+     // handleAxiosError(error);
+    // console.log(error);
   }
 };
 
@@ -196,7 +197,7 @@ async function main() {
     */
     await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
   } catch (error) {
-    handleAxiosError(error);
+    // handleAxiosError(error);
     core.setFailed(error);
   }
 }
