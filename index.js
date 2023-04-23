@@ -8,9 +8,9 @@ const DIALECT = 'postgres';
 
 const getDbdetails = async (dbConnection) => {
   const dbDetails = dbDetailsFactory('postgres');
-  const db = dbDetails.getExtendedDbDetailsData(dbConnection, {getAllExtraData: true});
+  const db = dbDetails.getExtendedDbDetailsData(dbConnection, { getAllExtraData: true });
   const data = await db;
-  core.info(JSON.stringify(data))
+  core.info(JSON.stringify(data));
   return await data;
 };
 
@@ -37,7 +37,7 @@ const handleAxiosError = (error) => {
     console.log('Error', error.message);
   }
   console.log(error.config);
-}
+};
 
 function splitArrayIntoChunks(array, chunkSize) {
   const result = [];
@@ -107,7 +107,6 @@ const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url, tableSize, 
     await axiosPost(url, tableSizePoints, options);
   } catch (error) {
     // handleAxiosError(error);
-  
   }
 };
 
@@ -131,7 +130,7 @@ const axiosPost = async (url, body, headers) => {
     const res = await axios.post(url, body, { headers: headers });
     return res;
   } catch (error) {
-     // handleAxiosError(error);
+    // handleAxiosError(error);
     // console.log(error);
   }
 };
@@ -174,28 +173,30 @@ async function main() {
         g. Database configuration.
     */
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-   
+
     /*
      Send schemas structure.
     */
-     dbDetailsExtraData?.dbDetails && await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
+    dbDetailsExtraData?.dbDetails && (await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails));
     /*
      Send available extensions.
     */
-   core.info(JSON.stringify(dbDetailsExtraData?.databaseAvialableExtensions))
-     dbDetailsExtraData?.databaseAvailableExtensions && await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
-    /*databaseAvailableExtensions
+
+    dbDetailsExtraData?.databaseAvailableExtensions &&
+      (await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvailableExtensions));
+    /*
      Send database configuration.
     */
-     dbDetailsExtraData?.databaseConfig && await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
+    dbDetailsExtraData?.databaseConfig && (await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig));
     /*
      Send query statistics.
     */
-     dbDetailsExtraData?.databaseStatStatements && await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements);
+    dbDetailsExtraData?.databaseStatStatements && (await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements));
     /*
      Send Table statistics and index usage.
     */
-     (dbDetailsExtraData?.tableSize  || dbDetailsExtraData?.indexUsage) && await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage);
+    (dbDetailsExtraData?.tableSize || dbDetailsExtraData?.indexUsage) &&
+      (await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage));
   } catch (error) {
     // handleAxiosError(error);
     core.setFailed(error);
