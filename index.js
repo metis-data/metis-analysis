@@ -178,7 +178,7 @@ async function main() {
     /*
      Send schemas structure.
     */
-    await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
+    // await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails);
     /*
      Send available extensions.
     */
