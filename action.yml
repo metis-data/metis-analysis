@@ -20,7 +20,6 @@ inputs:
   get_extra_data:
     description: get_extra_data
     required: false
-    default: false
   db_connection_string:
     description: database connection string 
     required: true

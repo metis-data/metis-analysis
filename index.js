@@ -184,7 +184,7 @@ async function main() {
     */
     await sendAvailableExtensions(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-extension`, dbDetailsExtraData?.databaseAvialableExtensions);
     /*
-     Send database configuration.
+     Send database configu-*ration.
     */
     await sendPgConfig(dbConnection, metisApikey, `${metisUrl}/pmc/customer-db-config`, dbDetailsExtraData?.databaseConfig);
     /*
