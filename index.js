@@ -64,23 +64,35 @@ const sendDbdetails = async (dbConnection, apiKey, url, data) => {
   // let results = await Promise.all(chunks.map(async (dataToSend) => {
   //   aw®`ait sendDataToMetis(dbConnection, apiKey, url, [dataToSend]);
   // }));
-  await sendDataToMetis(dbConnection, apiKey, url, data);
+  try {
+    await sendDataToMetis(dbConnection, apiKey, url, data);
+  } catch (error) {
+    handleAxiosError(error);
+  }
 };
 
 const sendstatStatements = async (dbConnection, apiKey, url, data) => {
   try {
     await sendDataToMetis(dbConnection, apiKey, url, data);
   } catch (error) {
-    console.log(error);
+    handleAxiosError(error);
   }
 };
 
 const sendAvailableExtensions = async (dbConnection, apiKey, url, data) => {
-  await sendDataToMetis(dbConnection, apiKey, url, data);
+  try {
+    await sendDataToMetis(dbConnection, apiKey, url, data);
+  } catch (error) {
+    handleAxiosError(error);
+  }
 };
 
 const sendPgConfig = async (dbConnection, apiKey, url, data) => {
-  await sendDataToMetis(dbConnection, apiKey, url, data);
+  try {
+    await sendDataToMetis(dbConnection, apiKey, url, data);
+  } catch (error) {
+    handleAxiosError(error);
+  }
 };
 
 const createPmcDevice = async (dbConnection, apiKey, url) => {
@@ -106,7 +118,7 @@ const sendTableSizeAndIndexUsage = async (dbConnection, apiKey, url, tableSize, 
     await axiosPost(url, indexUsagePoints, options);
     await axiosPost(url, tableSizePoints, options);
   } catch (error) {
-    // handleAxiosError(error);
+    handleAxiosError(error);
   }
 };
 
@@ -130,8 +142,7 @@ const axiosPost = async (url, body, headers) => {
     const res = await axios.post(url, body, { headers: headers });
     return res;
   } catch (error) {
-    // handleAxiosError(error);
-    // console.log(error);
+    handleAxiosError(error);
   }
 };
 
@@ -177,6 +188,7 @@ async function main() {
     /*
      Send schemas structure.
     */
+
     dbDetailsExtraData?.dbDetails && (await sendDbdetails(dbConnection, metisApikey, `${metisUrl}/db-details`, dbDetailsExtraData?.dbDetails));
     /*
      Send available extensions.
@@ -191,14 +203,14 @@ async function main() {
     /*
      Send query statistics.
     */
-   // dbDetailsExtraData?.databaseStatStatements && (await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements));
+    dbDetailsExtraData?.databaseStatStatements && (await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements));
     /*
      Send Table statistics and index usage.
     */
     (dbDetailsExtraData?.tableSize || dbDetailsExtraData?.indexUsage) &&
       (await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage));
   } catch (error) {
-     handleAxiosError(error);
+    console.log(error);
     core.setFailed(error);
   }
 }
