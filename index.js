@@ -174,7 +174,7 @@ async function main() {
         g. Database configuration.
     */
     const dbDetailsExtraData = await getDbdetails(dbConnection, metisApikey, metisExporterUrl, foreignTableName);
-
+    core.info(JSON.stringify(dbDetailsExtraData));
     /*
      Send schemas structure.
     */
