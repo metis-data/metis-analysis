@@ -10,7 +10,7 @@ const getDbdetails = async (dbConnection) => {
   const dbDetails = dbDetailsFactory('postgres');
   const db = dbDetails.getExtendedDbDetailsData(dbConnection, { getAllExtraData: true });
   const data = await db;
-  core.info(JSON.stringify(data));
+
   return await data;
 };
 
@@ -191,14 +191,14 @@ async function main() {
     /*
      Send query statistics.
     */
-    dbDetailsExtraData?.databaseStatStatements && (await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements));
+   // dbDetailsExtraData?.databaseStatStatements && (await sendstatStatements(dbConnection, metisApikey, `${metisUrl}/pmc/statistics/query`, dbDetailsExtraData?.databaseStatStatements));
     /*
      Send Table statistics and index usage.
     */
     (dbDetailsExtraData?.tableSize || dbDetailsExtraData?.indexUsage) &&
       (await sendTableSizeAndIndexUsage(dbConnection, metisApikey, metisExporterUrl + '/md-collector/', dbDetailsExtraData?.tableSize, dbDetailsExtraData?.indexUsage));
   } catch (error) {
-    // handleAxiosError(error);
+     handleAxiosError(error);
     core.setFailed(error);
   }
 }
