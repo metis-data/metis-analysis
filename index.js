@@ -149,7 +149,7 @@ const axiosPost = async (url, body, headers) => {
     const res = await axios.post(url, body, { headers: headers });
     return res;
   } catch (error) {
-    handleAxiosError(error);
+    throw error;
   }
 };
 
@@ -172,7 +172,7 @@ async function main() {
       user: config.user,
       password: config.password,
       host: config.host,
-      // ssl: config?.ssl || { rejectUnauthorized: false },
+       ssl: { rejectUnauthorized: false },
     };
 
     /*
